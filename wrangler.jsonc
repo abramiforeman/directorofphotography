@@ -1,6 +1,6 @@
 {
   // Static site: no Worker code, just serve the files in this repo
-  "name": "directorofphotography",
+  "name": "abram-foreman-site",
   "compatibility_date": "2026-10-05",
   "assets": {
     "directory": "./"
