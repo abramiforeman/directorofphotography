@@ -4,8 +4,11 @@
  * POST /api/contact by handing the message to Resend, and it passes everything else through
  * to the site itself. The Resend API key lives in the project's secrets, never in the page.
  *
- * Deploy: keep this file beside index.html in the folder you upload.
- * Secret:  Pages project -> Settings -> Variables and secrets -> RESEND_API_KEY (type: Secret)
+ * This is the Worker's entry point - wrangler.jsonc points `main` at it. It is NOT a static
+ * asset: it never ends up in the public folder, so the key and this code stay server-side.
+ *
+ * Secret: npx wrangler secret put RESEND_API_KEY
+ *         (or the dashboard: Worker -> Settings -> Variables and Secrets -> add, type Secret)
  */
 
 const TO = "abram@foremanfilms.com";
