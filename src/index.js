@@ -1,8 +1,8 @@
 /* Foreman Films — contact relay
  *
- * Cloudflare Pages serves this file in front of the site. It does two things: it answers
- * POST /api/contact by handing the message to Resend, and it passes everything else through
- * to the site itself. The Resend API key lives in the project's secrets, never in the page.
+ * Cloudflare runs this in front of the site. It answers POST /api/contact by handing the
+ * message to Resend, redirects the email domain to the portfolio, and passes everything else
+ * through to the static files. The Resend API key is a Worker secret, never in the page.
  *
  * This is the Worker's entry point - wrangler.jsonc points `main` at it. It is NOT a static
  * asset: it never ends up in the public folder, so the key and this code stay server-side.
@@ -11,12 +11,21 @@
  *         (or the dashboard: Worker -> Settings -> Variables and Secrets -> add, type Secret)
  */
 
+const SITE = "abramforeman.com";                         // the portfolio lives here
 const TO = "abram@foremanfilms.com";
 const FROM = "Portfolio <site@send.foremanfilms.com>";   // must be on the domain verified in Resend
 
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+
+    /* foremanfilms.com carries the email and nothing else. anything that reaches it on the web
+       is sent to the portfolio rather than left on a dead domain. */
+    if (url.hostname === "foremanfilms.com" || url.hostname === "www.foremanfilms.com") {
+      url.hostname = SITE;
+      url.protocol = "https:";
+      return Response.redirect(url.toString(), 301);
+    }
 
     if (url.pathname === "/api/contact") {
       if (request.method !== "POST") {
