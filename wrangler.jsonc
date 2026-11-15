@@ -1,0 +1,21 @@
+{
+  // must match the Worker the CI expects, or every build logs a name-mismatch warning
+  "name": "directorofphotography",
+
+  // the server code. this is what _worker.js was trying to be - _worker.js is a Pages
+  // convention and has no meaning to `wrangler deploy`, which is why the build failed.
+  "main": "src/index.js",
+
+  "compatibility_date": "2026-11-14",
+
+  // only this folder is published. keep index.html and reel-hero.mp4 here and nothing else -
+  // the old build was serving the whole repo root, all 55 files of it.
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS"
+  },
+
+  "observability": {
+    "enabled": true
+  }
+}
