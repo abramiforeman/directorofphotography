@@ -11,7 +11,6 @@
  *         (or the dashboard: Worker -> Settings -> Variables and Secrets -> add, type Secret)
  */
 
-const SITE = "abramforeman.com";                         // the portfolio lives here
 const TO = "abram@foremanfilms.com";
 const FROM = "Portfolio <site@foremanfilms.com>";        // must be the domain verified in Resend.
                                                          // Resend puts the MX and SPF it needs on
@@ -80,15 +79,6 @@ export default {
       }
 
       return json({ ok: true });
-    }
-
-    /* foremanfilms.com carries the email and nothing else, so web traffic goes to the portfolio.
-       this sits BELOW the api: a redirect turns a POST into a GET, so sending it first broke the
-       contact form for anyone who happened to be on foremanfilms.com. */
-    if (url.hostname === "foremanfilms.com" || url.hostname === "www.foremanfilms.com") {
-      url.hostname = SITE;
-      url.protocol = "https:";
-      return Response.redirect(url.toString(), 301);
     }
 
     return env.ASSETS.fetch(request);    /* everything else is the site */
