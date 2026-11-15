@@ -13,7 +13,10 @@
 
 const SITE = "abramforeman.com";                         // the portfolio lives here
 const TO = "abram@foremanfilms.com";
-const FROM = "Portfolio <site@send.foremanfilms.com>";   // must be on the domain verified in Resend
+const FROM = "Portfolio <site@foremanfilms.com>";        // must be the domain verified in Resend.
+                                                         // Resend puts the MX and SPF it needs on
+                                                         // send.foremanfilms.com, but the verified
+                                                         // domain - and so the From - is the root.
 
 export default {
   async fetch(request, env) {
