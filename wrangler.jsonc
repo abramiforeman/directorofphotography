@@ -12,7 +12,11 @@
   // the old build was serving the whole repo root, all 55 files of it.
   "assets": {
     "directory": "./public",
-    "binding": "ASSETS"
+    "binding": "ASSETS",
+
+    // without this, a request matching a file is served straight from the asset store and the
+    // Worker never runs - so the foremanfilms.com redirect would never fire on a page load
+    "run_worker_first": true
   },
 
   "observability": {

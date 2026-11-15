@@ -22,14 +22,6 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
-    /* foremanfilms.com carries the email and nothing else. anything that reaches it on the web
-       is sent to the portfolio rather than left on a dead domain. */
-    if (url.hostname === "foremanfilms.com" || url.hostname === "www.foremanfilms.com") {
-      url.hostname = SITE;
-      url.protocol = "https:";
-      return Response.redirect(url.toString(), 301);
-    }
-
     if (url.pathname === "/api/contact") {
       if (request.method !== "POST") {
         return json({ ok: false, error: "Use POST." }, 405);
@@ -88,6 +80,15 @@ export default {
       }
 
       return json({ ok: true });
+    }
+
+    /* foremanfilms.com carries the email and nothing else, so web traffic goes to the portfolio.
+       this sits BELOW the api: a redirect turns a POST into a GET, so sending it first broke the
+       contact form for anyone who happened to be on foremanfilms.com. */
+    if (url.hostname === "foremanfilms.com" || url.hostname === "www.foremanfilms.com") {
+      url.hostname = SITE;
+      url.protocol = "https:";
+      return Response.redirect(url.toString(), 301);
     }
 
     return env.ASSETS.fetch(request);    /* everything else is the site */
